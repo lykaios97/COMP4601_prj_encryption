@@ -73,22 +73,16 @@ void SubBytes_fast(byte state[4][4]) {
             state[r][c] = sbox[state[r][c]];
 }
 
-// the whole thing can run in one clock cycle
 void ShiftRows(byte state[4][4]) {
-#pragma HLS INLINE
-    byte tmp[4];
-
-    // Row 1: shift left by 1
-    for (int c = 0; c < 4; c++) tmp[c] = state[1][(c + 1) % 4];
-    for (int c = 0; c < 4; c++) state[1][c] = tmp[c];
-
-    // Row 2: shift left by 2
-    for (int c = 0; c < 4; c++) tmp[c] = state[2][(c + 2) % 4];
-    for (int c = 0; c < 4; c++) state[2][c] = tmp[c];
-
-    // Row 3: shift left by 3
-    for (int c = 0; c < 4; c++) tmp[c] = state[3][(c + 3) % 4];
-    for (int c = 0; c < 4; c++) state[3][c] = tmp[c];
+  for (int r = 1; r < 4; r++) {
+    for (int shift = 0; shift < r; shift++) {
+      byte temp = state[r][0];
+      state[r][0] = state[r][1];
+      state[r][1] = state[r][2];
+      state[r][2] = state[r][3];
+      state[r][3] = temp;
+    }
+  }
 }
 
 void ShiftRows_fast(byte state[4][4]) {
