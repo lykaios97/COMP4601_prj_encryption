@@ -165,27 +165,19 @@ void MixColumns_fast(byte state[4][4]) {
 
 
 void AddRoundKey(byte state[4][4], const word roundKey[4]) {
-#pragma HLS INLINE
-    for (int c = 0; c < 4; c++) {
-        word keyWord = roundKey[c];
-        for (int r = 0; r < 4; r++)
-            state[r][c] ^= (keyWord >> (24 - 8 * r)) & 0xFF;
+    for (int j = 0; j <= 3; j++) {
+        for (int i = 0; i <= 3; i++) {
+            state[i][j] ^= (roundKey[j] >> (24 - 8 * i)) & 0xFF;
+        }
     }
 }
 
 void AddRoundKey_fast(byte state[4][4], const word roundKey[4]) {
-#pragma HLS INLINE
-    for (int c = 0; c < 4; c++) {
-#pragma HLS UNROLL
-        byte k0 = (roundKey[c] >> 24) & 0xFF;
-        byte k1 = (roundKey[c] >> 16) & 0xFF;
-        byte k2 = (roundKey[c] >> 8)  & 0xFF;
-        byte k3 = (roundKey[c])       & 0xFF;
-
-        state[0][c] ^= k0;
-        state[1][c] ^= k1;
-        state[2][c] ^= k2;
-        state[3][c] ^= k3;
+    for (int i = 0; i <= 3; i++) {
+        state[0][i] ^= (roundKey[i] >> 24) & 0xFF;
+        state[1][i] ^= (roundKey[i] >> 16) & 0xFF;
+        state[2][i] ^= (roundKey[i] >> 8) & 0xFF;
+        state[3][i] ^= (roundKey[i]) & 0xFF;
     }
 }
 
