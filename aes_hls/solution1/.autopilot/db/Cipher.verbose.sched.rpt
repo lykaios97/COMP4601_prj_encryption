@@ -1,0 +1,315 @@
+
+
+================================================================
+== Vivado HLS Report for 'Cipher'
+================================================================
+* Date:           Tue Jul 15 22:53:40 2025
+
+* Version:        2020.1.1 (Build 2951007 on Wed Aug 05 23:24:06 MDT 2020)
+* Project:        aes_hls
+* Solution:       solution1
+* Product family: virtex7
+* Target device:  xc7vx485t-ffg1157-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 10.00 ns | 6.453 ns |   1.25 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+------+------+---------+
+    |  Latency (cycles) |   Latency (absolute)  |   Interval  | Pipeline|
+    |   min   |   max   |    min    |    max    |  min |  max |   Type  |
+    +---------+---------+-----------+-----------+------+------+---------+
+    |     2265|     2505| 22.650 us | 25.050 us |  2265|  2505|   none  |
+    +---------+---------+-----------+-----------+------+------+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------+---------+---------+-----------+-----------+-----------+------+----------+
+        |          |  Latency (cycles) | Iteration |  Initiation Interval  | Trip |          |
+        | Loop Name|   min   |   max   |  Latency  |  achieved |   target  | Count| Pipelined|
+        +----------+---------+---------+-----------+-----------+-----------+------+----------+
+        |- Loop 1  |       32|       32|          2|          -|          -|    16|    no    |
+        |- Loop 2  |     2034|     2250| 226 ~ 250 |          -|          -|     9|    no    |
+        |- Loop 3  |       32|       32|          2|          -|          -|    16|    no    |
+        +----------+---------+---------+-----------+-----------+-----------+------+----------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 19
+* Pipeline : 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 3 4 
+3 --> 2 
+4 --> 5 
+5 --> 6 13 
+6 --> 7 
+7 --> 8 
+8 --> 9 
+9 --> 10 
+10 --> 11 
+11 --> 12 
+12 --> 5 
+13 --> 14 
+14 --> 15 
+15 --> 16 
+16 --> 17 
+17 --> 18 
+18 --> 19 
+19 --> 18 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 1.18>
+ST_1 : Operation 20 [1/1] (0.00ns)   --->   "%state_V = alloca [16 x i8], align 1" [AES_hls_cpp/aes_cipher.cpp:147]   --->   Operation 20 'alloca' 'state_V' <Predicate = true> <Delay = 0.00> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_1 : Operation 21 [1/1] (1.18ns)   --->   "br label %.preheader" [AES_hls_cpp/aes_cipher.cpp:149]   --->   Operation 21 'br' <Predicate = true> <Delay = 1.18>
+
+State 2 <SV = 1> <Delay = 1.42>
+ST_2 : Operation 22 [1/1] (0.00ns)   --->   "%i_0 = phi i5 [ %i, %0 ], [ 0, %.preheader.preheader ]"   --->   Operation 22 'phi' 'i_0' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 23 [1/1] (1.12ns)   --->   "%icmp_ln149 = icmp eq i5 %i_0, -16" [AES_hls_cpp/aes_cipher.cpp:149]   --->   Operation 23 'icmp' 'icmp_ln149' <Predicate = true> <Delay = 1.12> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 1.12> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 24 [1/1] (0.00ns)   --->   "%empty = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 16, i64 16, i64 16)"   --->   Operation 24 'speclooptripcount' 'empty' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 25 [1/1] (1.36ns)   --->   "%i = add i5 %i_0, 1" [AES_hls_cpp/aes_cipher.cpp:149]   --->   Operation 25 'add' 'i' <Predicate = true> <Delay = 1.36> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 1.36> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 26 [1/1] (0.00ns)   --->   "br i1 %icmp_ln149, label %1, label %0" [AES_hls_cpp/aes_cipher.cpp:149]   --->   Operation 26 'br' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 27 [1/1] (0.00ns)   --->   "%trunc_ln150_1 = call i2 @_ssdm_op_PartSelect.i2.i5.i32.i32(i5 %i_0, i32 2, i32 3)" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 27 'partselect' 'trunc_ln150_1' <Predicate = (!icmp_ln149)> <Delay = 0.00>
+ST_2 : Operation 28 [1/1] (0.00ns)   --->   "%trunc_ln321 = trunc i5 %i_0 to i2" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 28 'trunc' 'trunc_ln321' <Predicate = (!icmp_ln149)> <Delay = 0.00>
+ST_2 : Operation 29 [1/1] (0.00ns)   --->   "%zext_ln150 = zext i5 %i_0 to i64" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 29 'zext' 'zext_ln150' <Predicate = (!icmp_ln149)> <Delay = 0.00>
+ST_2 : Operation 30 [1/1] (0.00ns)   --->   "%in_V_addr = getelementptr [16 x i8]* %in_V, i64 0, i64 %zext_ln150" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 30 'getelementptr' 'in_V_addr' <Predicate = (!icmp_ln149)> <Delay = 0.00>
+ST_2 : Operation 31 [2/2] (1.42ns)   --->   "%in_V_load = load i8* %in_V_addr, align 1" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 31 'load' 'in_V_load' <Predicate = (!icmp_ln149)> <Delay = 1.42> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_2 : Operation 32 [2/2] (1.23ns)   --->   "call fastcc void @AddRoundKey([16 x i8]* %state_V, [44 x i32]* %w_V, i8 0)" [AES_hls_cpp/aes_cipher.cpp:152]   --->   Operation 32 'call' <Predicate = (icmp_ln149)> <Delay = 1.23> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 3 <SV = 2> <Delay = 2.85>
+ST_3 : Operation 33 [1/1] (0.00ns)   --->   "%tmp_6 = call i4 @_ssdm_op_BitConcatenate.i4.i2.i2(i2 %trunc_ln321, i2 %trunc_ln150_1)" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 33 'bitconcatenate' 'tmp_6' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 34 [1/1] (0.00ns)   --->   "%zext_ln321 = zext i4 %tmp_6 to i64" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 34 'zext' 'zext_ln321' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 35 [1/1] (0.00ns)   --->   "%state_V_addr = getelementptr [16 x i8]* %state_V, i64 0, i64 %zext_ln321" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 35 'getelementptr' 'state_V_addr' <Predicate = true> <Delay = 0.00>
+ST_3 : Operation 36 [1/2] (1.42ns)   --->   "%in_V_load = load i8* %in_V_addr, align 1" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 36 'load' 'in_V_load' <Predicate = true> <Delay = 1.42> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_3 : Operation 37 [1/1] (1.42ns)   --->   "store i8 %in_V_load, i8* %state_V_addr, align 1" [AES_hls_cpp/aes_cipher.cpp:150]   --->   Operation 37 'store' <Predicate = true> <Delay = 1.42> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_3 : Operation 38 [1/1] (0.00ns)   --->   "br label %.preheader" [AES_hls_cpp/aes_cipher.cpp:149]   --->   Operation 38 'br' <Predicate = true> <Delay = 0.00>
+
+State 4 <SV = 2> <Delay = 1.18>
+ST_4 : Operation 39 [1/2] (0.00ns)   --->   "call fastcc void @AddRoundKey([16 x i8]* %state_V, [44 x i32]* %w_V, i8 0)" [AES_hls_cpp/aes_cipher.cpp:152]   --->   Operation 39 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+ST_4 : Operation 40 [1/1] (1.18ns)   --->   "br label %2" [AES_hls_cpp/aes_cipher.cpp:154]   --->   Operation 40 'br' <Predicate = true> <Delay = 1.18>
+
+State 5 <SV = 3> <Delay = 1.18>
+ST_5 : Operation 41 [1/1] (0.00ns)   --->   "%round_0 = phi i4 [ 1, %1 ], [ %round, %3 ]"   --->   Operation 41 'phi' 'round_0' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 42 [1/1] (1.12ns)   --->   "%icmp_ln154 = icmp eq i4 %round_0, -6" [AES_hls_cpp/aes_cipher.cpp:154]   --->   Operation 42 'icmp' 'icmp_ln154' <Predicate = true> <Delay = 1.12> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 1.12> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_5 : Operation 43 [1/1] (0.00ns)   --->   "%empty_31 = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 9, i64 9, i64 9)"   --->   Operation 43 'speclooptripcount' 'empty_31' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 44 [1/1] (0.00ns)   --->   "br i1 %icmp_ln154, label %4, label %3" [AES_hls_cpp/aes_cipher.cpp:154]   --->   Operation 44 'br' <Predicate = true> <Delay = 0.00>
+ST_5 : Operation 45 [2/2] (1.18ns)   --->   "call fastcc void @SubBytes([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:155]   --->   Operation 45 'call' <Predicate = (!icmp_ln154)> <Delay = 1.18> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+ST_5 : Operation 46 [2/2] (1.18ns)   --->   "call fastcc void @SubBytes([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:161]   --->   Operation 46 'call' <Predicate = (icmp_ln154)> <Delay = 1.18> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 6 <SV = 4> <Delay = 0.00>
+ST_6 : Operation 47 [1/2] (0.00ns)   --->   "call fastcc void @SubBytes([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:155]   --->   Operation 47 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 7 <SV = 5> <Delay = 1.18>
+ST_7 : Operation 48 [2/2] (1.18ns)   --->   "call fastcc void @ShiftRows([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:156]   --->   Operation 48 'call' <Predicate = true> <Delay = 1.18> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 8 <SV = 6> <Delay = 0.00>
+ST_8 : Operation 49 [1/2] (0.00ns)   --->   "call fastcc void @ShiftRows([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:156]   --->   Operation 49 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 9 <SV = 7> <Delay = 0.00>
+ST_9 : Operation 50 [2/2] (0.00ns)   --->   "call fastcc void @MixColumns([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:157]   --->   Operation 50 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 10 <SV = 8> <Delay = 0.00>
+ST_10 : Operation 51 [1/2] (0.00ns)   --->   "call fastcc void @MixColumns([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:157]   --->   Operation 51 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 11 <SV = 9> <Delay = 1.36>
+ST_11 : Operation 52 [1/1] (0.00ns)   --->   "%shl_ln = call i6 @_ssdm_op_BitConcatenate.i6.i4.i2(i4 %round_0, i2 0)" [AES_hls_cpp/aes_cipher.cpp:158]   --->   Operation 52 'bitconcatenate' 'shl_ln' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 53 [1/1] (0.00ns)   --->   "%zext_ln158 = zext i6 %shl_ln to i8" [AES_hls_cpp/aes_cipher.cpp:158]   --->   Operation 53 'zext' 'zext_ln158' <Predicate = true> <Delay = 0.00>
+ST_11 : Operation 54 [2/2] (1.23ns)   --->   "call fastcc void @AddRoundKey([16 x i8]* %state_V, [44 x i32]* %w_V, i8 %zext_ln158)" [AES_hls_cpp/aes_cipher.cpp:158]   --->   Operation 54 'call' <Predicate = true> <Delay = 1.23> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+ST_11 : Operation 55 [1/1] (1.36ns)   --->   "%round = add i4 %round_0, 1" [AES_hls_cpp/aes_cipher.cpp:154]   --->   Operation 55 'add' 'round' <Predicate = true> <Delay = 1.36> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 1.36> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+
+State 12 <SV = 10> <Delay = 0.00>
+ST_12 : Operation 56 [1/2] (0.00ns)   --->   "call fastcc void @AddRoundKey([16 x i8]* %state_V, [44 x i32]* %w_V, i8 %zext_ln158)" [AES_hls_cpp/aes_cipher.cpp:158]   --->   Operation 56 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+ST_12 : Operation 57 [1/1] (0.00ns)   --->   "br label %2" [AES_hls_cpp/aes_cipher.cpp:154]   --->   Operation 57 'br' <Predicate = true> <Delay = 0.00>
+
+State 13 <SV = 4> <Delay = 0.00>
+ST_13 : Operation 58 [1/2] (0.00ns)   --->   "call fastcc void @SubBytes([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:161]   --->   Operation 58 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 14 <SV = 5> <Delay = 1.18>
+ST_14 : Operation 59 [2/2] (1.18ns)   --->   "call fastcc void @ShiftRows([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:162]   --->   Operation 59 'call' <Predicate = true> <Delay = 1.18> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 15 <SV = 6> <Delay = 0.00>
+ST_15 : Operation 60 [1/2] (0.00ns)   --->   "call fastcc void @ShiftRows([16 x i8]* %state_V)" [AES_hls_cpp/aes_cipher.cpp:162]   --->   Operation 60 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 16 <SV = 7> <Delay = 1.23>
+ST_16 : Operation 61 [2/2] (1.23ns)   --->   "call fastcc void @AddRoundKey([16 x i8]* %state_V, [44 x i32]* %w_V, i8 40)" [AES_hls_cpp/aes_cipher.cpp:163]   --->   Operation 61 'call' <Predicate = true> <Delay = 1.23> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+
+State 17 <SV = 8> <Delay = 1.18>
+ST_17 : Operation 62 [1/2] (0.00ns)   --->   "call fastcc void @AddRoundKey([16 x i8]* %state_V, [44 x i32]* %w_V, i8 40)" [AES_hls_cpp/aes_cipher.cpp:163]   --->   Operation 62 'call' <Predicate = true> <Delay = 0.00> <CoreType = "Generic">   --->   Core 0 '' <Latency = 0> <II = 1> <Delay = 1.00> <Generic> <Opcode : >
+ST_17 : Operation 63 [1/1] (1.18ns)   --->   "br label %5" [AES_hls_cpp/aes_cipher.cpp:165]   --->   Operation 63 'br' <Predicate = true> <Delay = 1.18>
+
+State 18 <SV = 9> <Delay = 1.42>
+ST_18 : Operation 64 [1/1] (0.00ns)   --->   "%i4_0 = phi i5 [ 0, %4 ], [ %i_1, %6 ]"   --->   Operation 64 'phi' 'i4_0' <Predicate = true> <Delay = 0.00>
+ST_18 : Operation 65 [1/1] (1.12ns)   --->   "%icmp_ln165 = icmp eq i5 %i4_0, -16" [AES_hls_cpp/aes_cipher.cpp:165]   --->   Operation 65 'icmp' 'icmp_ln165' <Predicate = true> <Delay = 1.12> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 1.12> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_18 : Operation 66 [1/1] (0.00ns)   --->   "%empty_32 = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 16, i64 16, i64 16)"   --->   Operation 66 'speclooptripcount' 'empty_32' <Predicate = true> <Delay = 0.00>
+ST_18 : Operation 67 [1/1] (1.36ns)   --->   "%i_1 = add i5 %i4_0, 1" [AES_hls_cpp/aes_cipher.cpp:165]   --->   Operation 67 'add' 'i_1' <Predicate = true> <Delay = 1.36> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 1.36> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_18 : Operation 68 [1/1] (0.00ns)   --->   "br i1 %icmp_ln165, label %7, label %6" [AES_hls_cpp/aes_cipher.cpp:165]   --->   Operation 68 'br' <Predicate = true> <Delay = 0.00>
+ST_18 : Operation 69 [1/1] (0.00ns)   --->   "%trunc_ln166_1 = call i2 @_ssdm_op_PartSelect.i2.i5.i32.i32(i5 %i4_0, i32 2, i32 3)" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 69 'partselect' 'trunc_ln166_1' <Predicate = (!icmp_ln165)> <Delay = 0.00>
+ST_18 : Operation 70 [1/1] (0.00ns)   --->   "%trunc_ln321_2 = trunc i5 %i4_0 to i2" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 70 'trunc' 'trunc_ln321_2' <Predicate = (!icmp_ln165)> <Delay = 0.00>
+ST_18 : Operation 71 [1/1] (0.00ns)   --->   "%tmp_8 = call i4 @_ssdm_op_BitConcatenate.i4.i2.i2(i2 %trunc_ln321_2, i2 %trunc_ln166_1)" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 71 'bitconcatenate' 'tmp_8' <Predicate = (!icmp_ln165)> <Delay = 0.00>
+ST_18 : Operation 72 [1/1] (0.00ns)   --->   "%zext_ln321_2 = zext i4 %tmp_8 to i64" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 72 'zext' 'zext_ln321_2' <Predicate = (!icmp_ln165)> <Delay = 0.00>
+ST_18 : Operation 73 [1/1] (0.00ns)   --->   "%state_V_addr_5 = getelementptr [16 x i8]* %state_V, i64 0, i64 %zext_ln321_2" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 73 'getelementptr' 'state_V_addr_5' <Predicate = (!icmp_ln165)> <Delay = 0.00>
+ST_18 : Operation 74 [2/2] (1.42ns)   --->   "%state_V_load = load i8* %state_V_addr_5, align 1" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 74 'load' 'state_V_load' <Predicate = (!icmp_ln165)> <Delay = 1.42> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_18 : Operation 75 [1/1] (0.00ns)   --->   "ret void" [AES_hls_cpp/aes_cipher.cpp:167]   --->   Operation 75 'ret' <Predicate = (icmp_ln165)> <Delay = 0.00>
+
+State 19 <SV = 10> <Delay = 2.85>
+ST_19 : Operation 76 [1/1] (0.00ns)   --->   "%zext_ln166 = zext i5 %i4_0 to i64" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 76 'zext' 'zext_ln166' <Predicate = true> <Delay = 0.00>
+ST_19 : Operation 77 [1/2] (1.42ns)   --->   "%state_V_load = load i8* %state_V_addr_5, align 1" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 77 'load' 'state_V_load' <Predicate = true> <Delay = 1.42> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_19 : Operation 78 [1/1] (0.00ns)   --->   "%out_V_addr = getelementptr [16 x i8]* %out_V, i64 0, i64 %zext_ln166" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 78 'getelementptr' 'out_V_addr' <Predicate = true> <Delay = 0.00>
+ST_19 : Operation 79 [1/1] (1.42ns)   --->   "store i8 %state_V_load, i8* %out_V_addr, align 1" [AES_hls_cpp/aes_cipher.cpp:166]   --->   Operation 79 'store' <Predicate = true> <Delay = 1.42> <Core = "RAM">   --->   Core 37 'RAM' <Latency = 1> <II = 1> <Delay = 1.42> <Storage> <Opcode : 'load' 'store'> <Ports = 2> <Width = 8> <Depth = 16> <RAM>
+ST_19 : Operation 80 [1/1] (0.00ns)   --->   "br label %5" [AES_hls_cpp/aes_cipher.cpp:165]   --->   Operation 80 'br' <Predicate = true> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 1.18ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('i') with incoming values : ('i', AES_hls_cpp/aes_cipher.cpp:149) [9]  (1.18 ns)
+
+ <State 2>: 1.43ns
+The critical path consists of the following:
+	'phi' operation ('i') with incoming values : ('i', AES_hls_cpp/aes_cipher.cpp:149) [9]  (0 ns)
+	'getelementptr' operation ('in_V_addr', AES_hls_cpp/aes_cipher.cpp:150) [21]  (0 ns)
+	'load' operation ('in_V_load', AES_hls_cpp/aes_cipher.cpp:150) on array 'in_V' [22]  (1.43 ns)
+
+ <State 3>: 2.85ns
+The critical path consists of the following:
+	'load' operation ('in_V_load', AES_hls_cpp/aes_cipher.cpp:150) on array 'in_V' [22]  (1.43 ns)
+	'store' operation ('store_ln150', AES_hls_cpp/aes_cipher.cpp:150) of variable 'in_V_load', AES_hls_cpp/aes_cipher.cpp:150 on array 'state.V', AES_hls_cpp/aes_cipher.cpp:147 [23]  (1.43 ns)
+
+ <State 4>: 1.18ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('round') with incoming values : ('round', AES_hls_cpp/aes_cipher.cpp:154) [29]  (1.18 ns)
+
+ <State 5>: 1.18ns
+The critical path consists of the following:
+	'call' operation ('call_ln155', AES_hls_cpp/aes_cipher.cpp:155) to 'SubBytes' [34]  (1.18 ns)
+
+ <State 6>: 0ns
+The critical path consists of the following:
+
+ <State 7>: 1.18ns
+The critical path consists of the following:
+	'call' operation ('call_ln156', AES_hls_cpp/aes_cipher.cpp:156) to 'ShiftRows' [35]  (1.18 ns)
+
+ <State 8>: 0ns
+The critical path consists of the following:
+
+ <State 9>: 0ns
+The critical path consists of the following:
+
+ <State 10>: 0ns
+The critical path consists of the following:
+
+ <State 11>: 1.36ns
+The critical path consists of the following:
+	'add' operation ('round', AES_hls_cpp/aes_cipher.cpp:154) [40]  (1.36 ns)
+
+ <State 12>: 0ns
+The critical path consists of the following:
+
+ <State 13>: 0ns
+The critical path consists of the following:
+
+ <State 14>: 1.18ns
+The critical path consists of the following:
+	'call' operation ('call_ln162', AES_hls_cpp/aes_cipher.cpp:162) to 'ShiftRows' [44]  (1.18 ns)
+
+ <State 15>: 0ns
+The critical path consists of the following:
+
+ <State 16>: 1.24ns
+The critical path consists of the following:
+	'call' operation ('call_ln163', AES_hls_cpp/aes_cipher.cpp:163) to 'AddRoundKey' [45]  (1.24 ns)
+
+ <State 17>: 1.18ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('i') with incoming values : ('i', AES_hls_cpp/aes_cipher.cpp:165) [48]  (1.18 ns)
+
+ <State 18>: 1.43ns
+The critical path consists of the following:
+	'phi' operation ('i') with incoming values : ('i', AES_hls_cpp/aes_cipher.cpp:165) [48]  (0 ns)
+	'getelementptr' operation ('state_V_addr_5', AES_hls_cpp/aes_cipher.cpp:166) [59]  (0 ns)
+	'load' operation ('state_V_load', AES_hls_cpp/aes_cipher.cpp:166) on array 'state.V', AES_hls_cpp/aes_cipher.cpp:147 [60]  (1.43 ns)
+
+ <State 19>: 2.85ns
+The critical path consists of the following:
+	'load' operation ('state_V_load', AES_hls_cpp/aes_cipher.cpp:166) on array 'state.V', AES_hls_cpp/aes_cipher.cpp:147 [60]  (1.43 ns)
+	'store' operation ('store_ln166', AES_hls_cpp/aes_cipher.cpp:166) of variable 'state_V_load', AES_hls_cpp/aes_cipher.cpp:166 on array 'out_V' [62]  (1.43 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+	State 3
+	State 4
+	State 5
+	State 6
+	State 7
+	State 8
+	State 9
+	State 10
+	State 11
+	State 12
+	State 13
+	State 14
+	State 15
+	State 16
+	State 17
+	State 18
+	State 19
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

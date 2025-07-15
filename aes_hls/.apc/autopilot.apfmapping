@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<autopilotfilemapping:AutoPilotFileMapping xmlns:autopilotfilemapping="www.autoesl.com/autopilotfilemapping">
+  <source>
+    <originFiles name="HLS_top.cpp" path="C:\Users\Administrator\Desktop\6420_proj\COMP4601_prj_encryption\AES_hls_cpp\HLS_top.cpp"/>
+    <originFiles name="aes_cipher.cpp" path="C:\Users\Administrator\Desktop\6420_proj\COMP4601_prj_encryption\AES_hls_cpp\aes_cipher.cpp"/>
+  </source>
+  <testbench>
+    <originFiles name="aes_tb.cpp" path="C:\Users\Administrator\Desktop\6420_proj\COMP4601_prj_encryption\AES_hls_cpp\aes_tb.cpp"/>
+  </testbench>
+</autopilotfilemapping:AutoPilotFileMapping>

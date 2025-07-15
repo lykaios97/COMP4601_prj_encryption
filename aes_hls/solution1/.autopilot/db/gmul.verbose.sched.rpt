@@ -1,0 +1,143 @@
+
+
+================================================================
+== Vivado HLS Report for 'gmul'
+================================================================
+* Date:           Tue Jul 15 22:53:40 2025
+
+* Version:        2020.1.1 (Build 2951007 on Wed Aug 05 23:24:06 MDT 2020)
+* Project:        aes_hls
+* Solution:       solution1
+* Product family: virtex7
+* Target device:  xc7vx485t-ffg1157-1
+
+
+================================================================
+== Performance Estimates
+================================================================
++ Timing: 
+    * Summary: 
+    +--------+----------+----------+------------+
+    |  Clock |  Target  | Estimated| Uncertainty|
+    +--------+----------+----------+------------+
+    |ap_clk  | 10.00 ns | 1.362 ns |   1.25 ns  |
+    +--------+----------+----------+------------+
+
++ Latency: 
+    * Summary: 
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |  Latency (cycles) |   Latency (absolute)  |  Interval | Pipeline|
+    |   min   |   max   |    min    |    max    | min | max |   Type  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+    |        9|        9| 90.000 ns | 90.000 ns |    9|    9|   none  |
+    +---------+---------+-----------+-----------+-----+-----+---------+
+
+    + Detail: 
+        * Instance: 
+        N/A
+
+        * Loop: 
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+        |          |  Latency (cycles) | Iteration|  Initiation Interval  | Trip |          |
+        | Loop Name|   min   |   max   |  Latency |  achieved |   target  | Count| Pipelined|
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+        |- Loop 1  |        8|        8|         1|          -|          -|     8|    no    |
+        +----------+---------+---------+----------+-----------+-----------+------+----------+
+
+============================================================
++ Verbose Summary: Synthesis Manager
+============================================================
+InlineROM: 1
+ExposeGlobal: 0
+============================================================
++ Verbose Summary: CDFG Model
+============================================================
+IsTopModel: 0
+ResetActiveHigh: 1
+IsCombinational: 0
+IsDatapathOnly: 0
+HasWiredReturn: 1
+HasMFsm: 0
+HasVarLatency: 1
+IsPipeline: 0
+IsRtlPipelined: 0
+IsInstanceOverlapped: 0
+IsDontTouch: 0
+HasImplIP: 0
+IsGatedGlobalClock: 0
+
+
+============================================================
++ Verbose Summary: Schedule
+============================================================
+* Number of FSM states : 2
+* Pipeline : 0
+* Dataflow Pipeline: 0
+
+* FSM state transitions: 
+1 --> 2 
+2 --> 2 
+
+* FSM state operations: 
+
+State 1 <SV = 0> <Delay = 1.18>
+ST_1 : Operation 3 [1/1] (0.00ns)   --->   "%b_V_read = call i8 @_ssdm_op_Read.ap_auto.i8(i8 %b_V)"   --->   Operation 3 'read' 'b_V_read' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 4 [1/1] (0.00ns)   --->   "%a_V_read = call i3 @_ssdm_op_Read.ap_auto.i3(i3 %a_V)"   --->   Operation 4 'read' 'a_V_read' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 5 [1/1] (0.00ns)   --->   "%a_V_cast = zext i3 %a_V_read to i8"   --->   Operation 5 'zext' 'a_V_cast' <Predicate = true> <Delay = 0.00>
+ST_1 : Operation 6 [1/1] (1.18ns)   --->   "br label %1" [AES_hls_cpp/aes_cipher.cpp:55]   --->   Operation 6 'br' <Predicate = true> <Delay = 1.18>
+
+State 2 <SV = 1> <Delay = 1.36>
+ST_2 : Operation 7 [1/1] (0.00ns)   --->   "%agg_result_V_0 = phi i8 [ 0, %0 ], [ %select_ln56, %_ZlSILi8ELb0EER11ap_int_baseIXT_EXT0_EES2_i.exit ]" [AES_hls_cpp/aes_cipher.cpp:56]   --->   Operation 7 'phi' 'agg_result_V_0' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 8 [1/1] (0.00ns)   --->   "%a_V_buf_0 = phi i8 [ %a_V_cast, %0 ], [ %select_ln59, %_ZlSILi8ELb0EER11ap_int_baseIXT_EXT0_EES2_i.exit ]" [AES_hls_cpp/aes_cipher.cpp:59]   --->   Operation 8 'phi' 'a_V_buf_0' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 9 [1/1] (0.00ns)   --->   "%b_V_buf_0 = phi i8 [ %b_V_read, %0 ], [ %zext_ln858, %_ZlSILi8ELb0EER11ap_int_baseIXT_EXT0_EES2_i.exit ]" [AES_hls_cpp/aes_cipher.cpp:60]   --->   Operation 9 'phi' 'b_V_buf_0' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 10 [1/1] (0.00ns)   --->   "%agg_result_V_load = phi i8 [ 0, %0 ], [ %select_ln56_1, %_ZlSILi8ELb0EER11ap_int_baseIXT_EXT0_EES2_i.exit ]" [AES_hls_cpp/aes_cipher.cpp:56]   --->   Operation 10 'phi' 'agg_result_V_load' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 11 [1/1] (0.00ns)   --->   "%i_0 = phi i4 [ 0, %0 ], [ %i, %_ZlSILi8ELb0EER11ap_int_baseIXT_EXT0_EES2_i.exit ]"   --->   Operation 11 'phi' 'i_0' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 12 [1/1] (1.12ns)   --->   "%icmp_ln55 = icmp eq i4 %i_0, -8" [AES_hls_cpp/aes_cipher.cpp:55]   --->   Operation 12 'icmp' 'icmp_ln55' <Predicate = true> <Delay = 1.12> <Core = "Cmp">   --->   Core 25 'Cmp' <Latency = 0> <II = 1> <Delay = 1.12> <FuncUnit> <Opcode : 'icmp'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 13 [1/1] (0.00ns)   --->   "%empty = call i32 (...)* @_ssdm_op_SpecLoopTripCount(i64 8, i64 8, i64 8)"   --->   Operation 13 'speclooptripcount' 'empty' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 14 [1/1] (1.36ns)   --->   "%i = add i4 %i_0, 1" [AES_hls_cpp/aes_cipher.cpp:55]   --->   Operation 14 'add' 'i' <Predicate = true> <Delay = 1.36> <Core = "AddSub">   --->   Core 14 'AddSub' <Latency = 0> <II = 1> <Delay = 1.36> <FuncUnit> <Opcode : 'add' 'sub'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 15 [1/1] (0.00ns)   --->   "br i1 %icmp_ln55, label %2, label %_ZlSILi8ELb0EER11ap_int_baseIXT_EXT0_EES2_i.exit" [AES_hls_cpp/aes_cipher.cpp:55]   --->   Operation 15 'br' <Predicate = true> <Delay = 0.00>
+ST_2 : Operation 16 [1/1] (0.66ns)   --->   "%p_V = xor i8 %agg_result_V_load, %a_V_buf_0" [AES_hls_cpp/aes_cipher.cpp:56]   --->   Operation 16 'xor' 'p_V' <Predicate = (!icmp_ln55)> <Delay = 0.66> <Core = "LogicGate">   --->   Core 27 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.66> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 17 [1/1] (0.00ns)   --->   "%trunc_ln55 = trunc i8 %b_V_buf_0 to i1" [AES_hls_cpp/aes_cipher.cpp:55]   --->   Operation 17 'trunc' 'trunc_ln55' <Predicate = (!icmp_ln55)> <Delay = 0.00>
+ST_2 : Operation 18 [1/1] (0.47ns)   --->   "%select_ln56 = select i1 %trunc_ln55, i8 %p_V, i8 %agg_result_V_0" [AES_hls_cpp/aes_cipher.cpp:56]   --->   Operation 18 'select' 'select_ln56' <Predicate = (!icmp_ln55)> <Delay = 0.47> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.47> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_2 : Operation 19 [1/1] (0.47ns)   --->   "%select_ln56_1 = select i1 %trunc_ln55, i8 %p_V, i8 %agg_result_V_load" [AES_hls_cpp/aes_cipher.cpp:56]   --->   Operation 19 'select' 'select_ln56_1' <Predicate = (!icmp_ln55)> <Delay = 0.47> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.47> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_2 : Operation 20 [1/1] (0.00ns) (grouped into LUT with out node select_ln59)   --->   "%hi_bit = call i1 @_ssdm_op_BitSelect.i1.i8.i32(i8 %a_V_buf_0, i32 7)" [AES_hls_cpp/aes_cipher.cpp:57]   --->   Operation 20 'bitselect' 'hi_bit' <Predicate = (!icmp_ln55)> <Delay = 0.00>
+ST_2 : Operation 21 [1/1] (0.00ns)   --->   "%shl_ln841 = shl i8 %a_V_buf_0, 1" [AES_hls_cpp/aes_cipher.cpp:58]   --->   Operation 21 'shl' 'shl_ln841' <Predicate = (!icmp_ln55)> <Delay = 0.00>
+ST_2 : Operation 22 [1/1] (0.00ns) (grouped into LUT with out node select_ln59)   --->   "%xor_ln719 = xor i8 %shl_ln841, 27" [AES_hls_cpp/aes_cipher.cpp:59]   --->   Operation 22 'xor' 'xor_ln719' <Predicate = (!icmp_ln55)> <Delay = 0.00> <Core = "LogicGate">   --->   Core 27 'LogicGate' <Latency = 0> <II = 1> <Delay = 0.66> <FuncUnit> <Opcode : 'and' 'or' 'xor'> <InPorts = 2> <OutPorts = 1>
+ST_2 : Operation 23 [1/1] (0.66ns) (out node of the LUT)   --->   "%select_ln59 = select i1 %hi_bit, i8 %xor_ln719, i8 %shl_ln841" [AES_hls_cpp/aes_cipher.cpp:59]   --->   Operation 23 'select' 'select_ln59' <Predicate = (!icmp_ln55)> <Delay = 0.66> <Core = "Sel">   --->   Core 26 'Sel' <Latency = 0> <II = 1> <Delay = 0.47> <FuncUnit> <Opcode : 'select'> <InPorts = 3> <OutPorts = 1>
+ST_2 : Operation 24 [1/1] (0.00ns)   --->   "%lshr_ln = call i7 @_ssdm_op_PartSelect.i7.i8.i32.i32(i8 %b_V_buf_0, i32 1, i32 7)" [AES_hls_cpp/aes_cipher.cpp:60]   --->   Operation 24 'partselect' 'lshr_ln' <Predicate = (!icmp_ln55)> <Delay = 0.00>
+ST_2 : Operation 25 [1/1] (0.00ns)   --->   "%zext_ln858 = zext i7 %lshr_ln to i8" [AES_hls_cpp/aes_cipher.cpp:60]   --->   Operation 25 'zext' 'zext_ln858' <Predicate = (!icmp_ln55)> <Delay = 0.00>
+ST_2 : Operation 26 [1/1] (0.00ns)   --->   "br label %1" [AES_hls_cpp/aes_cipher.cpp:55]   --->   Operation 26 'br' <Predicate = (!icmp_ln55)> <Delay = 0.00>
+ST_2 : Operation 27 [1/1] (0.00ns)   --->   "ret i8 %agg_result_V_0" [AES_hls_cpp/aes_cipher.cpp:62]   --->   Operation 27 'ret' <Predicate = (icmp_ln55)> <Delay = 0.00>
+
+
+============================================================
++ Verbose Summary: Timing violations
+============================================================
+Target clock period: 10ns, clock uncertainty: 1.25ns.
+
+ <State 1>: 1.18ns
+The critical path consists of the following:
+	multiplexor before 'phi' operation ('agg_result_V_0', AES_hls_cpp/aes_cipher.cpp:56) with incoming values : ('select_ln56', AES_hls_cpp/aes_cipher.cpp:56) [8]  (1.18 ns)
+
+ <State 2>: 1.36ns
+The critical path consists of the following:
+	'phi' operation ('i') with incoming values : ('i', AES_hls_cpp/aes_cipher.cpp:55) [12]  (0 ns)
+	'add' operation ('i', AES_hls_cpp/aes_cipher.cpp:55) [15]  (1.36 ns)
+
+
+============================================================
++ Verbose Summary: Binding
+============================================================
+N/A
+* FSMD analyzer results:
+  - Output states:
+ - Input state : 
+  - Chain level:
+	State 1
+	State 2
+
+
+============================================================
++ Verbose Summary: Datapath Resource usage 
+============================================================
+N/A

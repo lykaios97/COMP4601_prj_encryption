@@ -1,0 +1,160 @@
+<profile>
+
+<section name = "Vivado HLS Report for 'Cipher'" level="0">
+<item name = "Date">Tue Jul 15 22:53:42 2025
+</item>
+<item name = "Version">2020.1.1 (Build 2951007 on Wed Aug 05 23:24:06 MDT 2020)</item>
+<item name = "Project">aes_hls</item>
+<item name = "Solution">solution1</item>
+<item name = "Product family">virtex7</item>
+<item name = "Target device">xc7vx485t-ffg1157-1</item>
+</section>
+
+<section name = "Performance Estimates" level="0">
+<item name = "Timing">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="4">Clock, Target, Estimated, Uncertainty</keys>
+<column name="ap_clk">10.00 ns, 6.453 ns, 1.25 ns</column>
+</table>
+</item>
+</section>
+</item>
+<item name = "Latency">
+<section name = "" level="1">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="8">, min, max, min, max, min, max, Type</keys>
+<column name="">2265, 2505, 22.650 us, 25.050 us, 2265, 2505, none</column>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="0">
+<keys size="9">Instance, Module, min, max, min, max, min, max, Type</keys>
+<column name="grp_MixColumns_fu_138">MixColumns, 101, 101, 1.010 us, 1.010 us, 101, 101, none</column>
+<column name="grp_AddRoundKey_fu_143">AddRoundKey, 41, 41, 0.410 us, 0.410 us, 41, 41, none</column>
+<column name="grp_ShiftRows_fu_153">ShiftRows, 19, 43, 0.190 us, 0.430 us, 19, 43, none</column>
+<column name="grp_SubBytes_fu_158">SubBytes, 57, 57, 0.570 us, 0.570 us, 57, 57, none</column>
+</table>
+</item>
+<item name = "Loop"><table name="" hasTotal="0">
+<keys size="8">Loop Name, min, max, Latency, achieved, target, Count, Pipelined</keys>
+<column name="- Loop 1">32, 32, 2, -, -, 16, no</column>
+<column name="- Loop 2">2034, 2250, 226 ~ 250, -, -, 9, no</column>
+<column name="- Loop 3">32, 32, 2, -, -, 16, no</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Utilization Estimates" level="0">
+<item name = "Summary"><table name="" hasTotal="1">
+<keys size="6">Name, BRAM_18K, DSP48E, FF, LUT, URAM</keys>
+<column name="DSP">-, -, -, -, -</column>
+<column name="Expression">-, -, 0, 74, -</column>
+<column name="FIFO">-, -, -, -, -</column>
+<column name="Instance">1, -, 556, 1860, -</column>
+<column name="Memory">1, -, 0, 0, 0</column>
+<column name="Multiplexer">-, -, -, 309, -</column>
+<column name="Register">-, -, 59, -, -</column>
+<specialColumn name="Available">2060, 2800, 607200, 303600, 0</specialColumn>
+<specialColumn name="Utilization (%)">~0, 0, ~0, ~0, 0</specialColumn>
+</table>
+</item>
+<item name = "Detail">
+<section name = "" level="1">
+<item name = "Instance"><table name="" hasTotal="1">
+<keys size="7">Instance, Module, BRAM_18K, DSP48E, FF, LUT, URAM</keys>
+<column name="grp_AddRoundKey_fu_143">AddRoundKey, 0, 0, 37, 240, 0</column>
+<column name="grp_MixColumns_fu_138">MixColumns, 0, 0, 466, 1356, 0</column>
+<column name="grp_ShiftRows_fu_153">ShiftRows, 0, 0, 29, 141, 0</column>
+<column name="grp_SubBytes_fu_158">SubBytes, 1, 0, 24, 123, 0</column>
+</table>
+</item>
+<item name = "DSP48E"><table name="" hasTotal="0">
+<keys size="3">Instance, Module, Expression</keys>
+</table>
+</item>
+<item name = "Memory"><table name="" hasTotal="1">
+<keys size="10">Memory, Module, BRAM_18K, FF, LUT, URAM, Words, Bits, Banks, W*Bits*Banks</keys>
+<column name="state_V_U">Cipher_state_V, 1, 0, 0, 0, 16, 8, 1, 128</column>
+</table>
+</item>
+<item name = "FIFO"><table name="" hasTotal="1">
+<keys size="8">Name, BRAM_18K, FF, LUT, URAM, Depth, Bits, Size:D*B</keys>
+</table>
+</item>
+<item name = "Expression"><table name="" hasTotal="1">
+<keys size="7">Variable Name, Operation, DSP48E, FF, LUT, Bitwidth P0, Bitwidth P1</keys>
+<column name="i_1_fu_238_p2">+, 0, 0, 15, 5, 1</column>
+<column name="i_fu_171_p2">+, 0, 0, 15, 5, 1</column>
+<column name="round_fu_226_p2">+, 0, 0, 13, 4, 1</column>
+<column name="icmp_ln149_fu_165_p2">icmp, 0, 0, 11, 5, 6</column>
+<column name="icmp_ln154_fu_207_p2">icmp, 0, 0, 9, 4, 4</column>
+<column name="icmp_ln165_fu_232_p2">icmp, 0, 0, 11, 5, 6</column>
+</table>
+</item>
+<item name = "Multiplexer"><table name="" hasTotal="1">
+<keys size="5">Name, LUT, Input Size, Bits, Total Bits</keys>
+<column name="ap_NS_fsm">97, 20, 1, 20</column>
+<column name="grp_AddRoundKey_fu_143_roundKey_V_offset">21, 4, 8, 32</column>
+<column name="i4_0_reg_126">9, 2, 5, 10</column>
+<column name="i_0_reg_103">9, 2, 5, 10</column>
+<column name="round_0_reg_114">9, 2, 4, 8</column>
+<column name="state_V_address0">38, 7, 4, 28</column>
+<column name="state_V_ce0">33, 6, 1, 6</column>
+<column name="state_V_ce1">9, 2, 1, 2</column>
+<column name="state_V_d0">33, 6, 8, 48</column>
+<column name="state_V_we0">33, 6, 1, 6</column>
+<column name="state_V_we1">9, 2, 1, 2</column>
+<column name="w_V_ce0">9, 2, 1, 2</column>
+</table>
+</item>
+<item name = "Register"><table name="" hasTotal="1">
+<keys size="5">Name, FF, LUT, Bits, Const Bits</keys>
+<column name="ap_CS_fsm">19, 0, 19, 0</column>
+<column name="grp_AddRoundKey_fu_143_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_MixColumns_fu_138_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_ShiftRows_fu_153_ap_start_reg">1, 0, 1, 0</column>
+<column name="grp_SubBytes_fu_158_ap_start_reg">1, 0, 1, 0</column>
+<column name="i4_0_reg_126">5, 0, 5, 0</column>
+<column name="i_0_reg_103">5, 0, 5, 0</column>
+<column name="i_1_reg_315">5, 0, 5, 0</column>
+<column name="i_reg_279">5, 0, 5, 0</column>
+<column name="round_0_reg_114">4, 0, 4, 0</column>
+<column name="round_reg_307">4, 0, 4, 0</column>
+<column name="trunc_ln150_1_reg_284">2, 0, 2, 0</column>
+<column name="trunc_ln321_reg_289">2, 0, 2, 0</column>
+<column name="zext_ln158_reg_302">4, 0, 8, 4</column>
+</table>
+</item>
+</section>
+</item>
+</section>
+
+<section name = "Interface" level="0">
+<item name = "Summary"><table name="" hasTotal="0">
+<keys size="6">RTL Ports, Dir, Bits, Protocol, Source Object, C Type</keys>
+<column name="ap_clk">in, 1, ap_ctrl_hs, Cipher, return value</column>
+<column name="ap_rst">in, 1, ap_ctrl_hs, Cipher, return value</column>
+<column name="ap_start">in, 1, ap_ctrl_hs, Cipher, return value</column>
+<column name="ap_done">out, 1, ap_ctrl_hs, Cipher, return value</column>
+<column name="ap_idle">out, 1, ap_ctrl_hs, Cipher, return value</column>
+<column name="ap_ready">out, 1, ap_ctrl_hs, Cipher, return value</column>
+<column name="in_V_address0">out, 4, ap_memory, in_V, array</column>
+<column name="in_V_ce0">out, 1, ap_memory, in_V, array</column>
+<column name="in_V_q0">in, 8, ap_memory, in_V, array</column>
+<column name="out_V_address0">out, 4, ap_memory, out_V, array</column>
+<column name="out_V_ce0">out, 1, ap_memory, out_V, array</column>
+<column name="out_V_we0">out, 1, ap_memory, out_V, array</column>
+<column name="out_V_d0">out, 8, ap_memory, out_V, array</column>
+<column name="w_V_address0">out, 6, ap_memory, w_V, array</column>
+<column name="w_V_ce0">out, 1, ap_memory, w_V, array</column>
+<column name="w_V_q0">in, 32, ap_memory, w_V, array</column>
+</table>
+</item>
+</section>
+</profile>

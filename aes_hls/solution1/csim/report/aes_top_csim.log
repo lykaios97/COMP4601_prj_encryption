@@ -1,0 +1,10 @@
+INFO: [SIM 2] *************** CSIM start ***************
+INFO: [SIM 4] CSIM will launch GCC as the compiler.
+   Compiling ../../../../AES_hls_cpp/aes_cipher.cpp in debug mode
+   Generating csim.exe
+Encrypted output:
+39 25 84 1d 02 dc 09 fb dc 11 85 97 19 6a 0b 32 
+
+Test PASSED âœ…
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************

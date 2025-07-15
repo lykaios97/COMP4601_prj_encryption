@@ -6,8 +6,9 @@ typedef ap_uint<8> byte;
 typedef ap_uint<32> word;
 
 #define Nb 4 // Block size in 32-bit words (4 words = 16 bytes)
+#define Nk 4  // Key length in 32-bit words (AES-128)
+#define Nr 10 // Number of rounds
 
-// S-box table (partial, for brevity – you must populate the full table)
 const byte sbox[256] = {
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5,
     0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
@@ -43,8 +44,12 @@ const byte sbox[256] = {
     0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16
 };
 
+const byte Rcon[11] = {
+    0x00, 0x01, 0x02, 0x04, 0x08,
+    0x10, 0x20, 0x40, 0x80, 0x1B, 0x36
+};
+
 byte gmul(byte a, byte b) {
-#pragma HLS INLINE
     byte p = 0;
     for (int i = 0; i < 8; i++) {
         if (b & 1) p ^= a;
@@ -56,65 +61,38 @@ byte gmul(byte a, byte b) {
     return p;
 }
 
-void SubBytes(byte state[4][4]) {
-#pragma HLS INLINE
-#pragma HLS UNROLL
-    for (int r = 0; r < 4; r++)
-        for (int c = 0; c < 4; c++)
-            state[r][c] = sbox[state[r][c]];
+byte xtime(byte x) {
+    return (x << 1) ^ ((x & 0x80) ? 0x1b : 0);
 }
 
-// the whole thing can run in one cycle 
-void SubBytes_fast(byte state[4][4]) {
-#pragma HLS INLINE
-#pragma HLS UNROLL
+byte gmul_fast(byte x, byte coeff) {
+    switch (coeff) {
+        case 0x01: return x;
+        case 0x02: return xtime(x);
+        case 0x03: return xtime(x) ^ x;
+        default: return 0;
+    }
+}
+
+void SubBytes(byte state[4][4]) {
     for (int r = 0; r < 4; r++)
         for (int c = 0; c < 4; c++)
             state[r][c] = sbox[state[r][c]];
 }
 
 void ShiftRows(byte state[4][4]) {
-  for (int r = 1; r < 4; r++) {
-    for (int shift = 0; shift < r; shift++) {
-      byte temp = state[r][0];
-      state[r][0] = state[r][1];
-      state[r][1] = state[r][2];
-      state[r][2] = state[r][3];
-      state[r][3] = temp;
+    for (int r = 1; r < 4; r++) {
+        for (int shift = 0; shift < r; shift++) {
+            byte temp = state[r][0];
+            state[r][0] = state[r][1];
+            state[r][1] = state[r][2];
+            state[r][2] = state[r][3];
+            state[r][3] = temp;
+        }
     }
-  }
-}
-
-void ShiftRows_fast(byte state[4][4]) {
-#pragma HLS INLINE
-
-    byte tmp;
-
-    // Row 1: shift left by 1
-    tmp = state[1][0];
-    state[1][0] = state[1][1];
-    state[1][1] = state[1][2];
-    state[1][2] = state[1][3];
-    state[1][3] = tmp;
-
-    // Row 2: shift left by 2
-    tmp = state[2][0];
-    state[2][0] = state[2][2];
-    state[2][2] = tmp;
-    tmp = state[2][1];
-    state[2][1] = state[2][3];
-    state[2][3] = tmp;
-
-    // Row 3: shift left by 3 (== right by 1)
-    tmp = state[3][3];
-    state[3][3] = state[3][2];
-    state[3][2] = state[3][1];
-    state[3][1] = state[3][0];
-    state[3][0] = tmp;
 }
 
 void MixColumns(byte state[4][4]) {
-#pragma HLS INLINE
     for (int c = 0; c < 4; c++) {
         byte a[4], res[4];
         for (int r = 0; r < 4; r++) a[r] = state[r][c];
@@ -128,81 +106,20 @@ void MixColumns(byte state[4][4]) {
     }
 }
 
-byte xtime(byte x) {
-#pragma HLS INLINE
-    return (x << 1) ^ ((x & 0x80) ? 0x1b : 0);
-}
-
-byte gmul_fast(byte x, byte coeff) {
-#pragma HLS INLINE
-    switch (coeff) {
-        case 0x01: return x;
-        case 0x02: return xtime(x);
-        case 0x03: return xtime(x) ^ x;
-        default:   return 0; // Shouldn't occur in MixColumns
-    }
-}
-
-// one cycle for the whole thing including gmul_fast and xtime
-void MixColumns_fast(byte state[4][4]) {
-#pragma HLS INLINE
-
-    for (int c = 0; c < 4; c++) {
-#pragma HLS UNROLL
-
-        byte a0 = state[0][c];
-        byte a1 = state[1][c];
-        byte a2 = state[2][c];
-        byte a3 = state[3][c];
-
-        state[0][c] = gmul_fast(a0, 0x02) ^ gmul_fast(a1, 0x03) ^ a2 ^ a3;
-        state[1][c] = a0 ^ gmul_fast(a1, 0x02) ^ gmul_fast(a2, 0x03) ^ a3;
-        state[2][c] = a0 ^ a1 ^ gmul_fast(a2, 0x02) ^ gmul_fast(a3, 0x03);
-        state[3][c] = gmul_fast(a0, 0x03) ^ a1 ^ a2 ^ gmul_fast(a3, 0x02);
-
-    }
-}
-
-
 void AddRoundKey(byte state[4][4], const word roundKey[4]) {
-    for (int j = 0; j <= 3; j++) {
-        for (int i = 0; i <= 3; i++) {
-            state[i][j] ^= (roundKey[j] >> (24 - 8 * i)) & 0xFF;
+    for (int j = 0; j < 4; j++) {
+        for (int i = 0; i < 4; i++) {
+            ap_uint<8> k = (roundKey[j] >> (24 - 8 * i)) & 0xFF;
+            state[i][j] ^= byte(k);
         }
     }
 }
 
-void AddRoundKey_fast(byte state[4][4], const word roundKey[4]) {
-    for (int i = 0; i <= 3; i++) {
-        state[0][i] ^= (roundKey[i] >> 24) & 0xFF;
-        state[1][i] ^= (roundKey[i] >> 16) & 0xFF;
-        state[2][i] ^= (roundKey[i] >> 8) & 0xFF;
-        state[3][i] ^= (roundKey[i]) & 0xFF;
-    }
-}
-
-#define Nk 4  // Key length in 32-bit words (AES-128)
-#define Nr 10 // Number of rounds
-
-// S-box (same as in your previous code – must be fully populated)
-extern const byte sbox[256];
-
-// Round constants
-const byte Rcon[11] = {
-    0x00, // not used
-    0x01, 0x02, 0x04, 0x08, 0x10,
-    0x20, 0x40, 0x80, 0x1B, 0x36
-};
-
-// RotWord: rotate bytes left
 word RotWord(word w) {
-#pragma HLS INLINE
     return (w << 8) | (w >> 24);
 }
 
-// SubWord: apply S-box to each byte
 word SubWord(word w) {
-#pragma HLS INLINE
     word result;
     result.range(31, 24) = sbox[w.range(31, 24)];
     result.range(23, 16) = sbox[w.range(23, 16)];
@@ -211,36 +128,24 @@ word SubWord(word w) {
     return result;
 }
 
-// Key Expansion: generate round keys from the original cipher key
 void KeyExpansion(const byte key[16], word w[44]) {
-#pragma HLS INLINE off
-
-    // Initial 4 words of the key
     for (int i = 0; i < Nk; i++) {
-#pragma HLS UNROLL
-        w[i] = (key[4 * i] << 24) |
-               (key[4 * i + 1] << 16) |
-               (key[4 * i + 2] << 8) |
-               (key[4 * i + 3]);
+        w[i] = (word(key[4 * i]) << 24) |
+               (word(key[4 * i + 1]) << 16) |
+               (word(key[4 * i + 2]) << 8) |
+               word(key[4 * i + 3]);
     }
-
-    // Expand to 44 words
     for (int i = Nk; i < Nb * (Nr + 1); i++) {
-#pragma HLS PIPELINE
         word temp = w[i - 1];
         if (i % Nk == 0)
-            temp = SubWord(RotWord(temp)) ^ (Rcon[i / Nk] << 24);
+            temp = SubWord(RotWord(temp)) ^ (word(Rcon[i / Nk]) << 24);
         w[i] = w[i - Nk] ^ temp;
     }
 }
 
-
-void Cipher(byte in[16], byte out[16], const word w[], int Nr) {
-#pragma HLS INLINE off
-
+void Cipher(byte in[16], byte out[16], const word w[]) {
     byte state[4][4];
 
-    // Load input into state array
     for (int i = 0; i < 16; i++)
         state[i % 4][i / 4] = in[i];
 
@@ -257,7 +162,6 @@ void Cipher(byte in[16], byte out[16], const word w[], int Nr) {
     ShiftRows(state);
     AddRoundKey(state, &w[Nr * Nb]);
 
-    // Copy state to output
     for (int i = 0; i < 16; i++)
         out[i] = state[i % 4][i / 4];
 }
