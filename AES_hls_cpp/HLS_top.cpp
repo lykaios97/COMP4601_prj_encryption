@@ -9,7 +9,11 @@ void Cipher(byte in[16], byte out[16], const word w[]);
 // Minimal top-level wrapper
 extern "C" {
 void aes_top(byte in[16], byte out[16], const word w[44]) {
-    // No pragmas for optimization — basic interface
+#pragma HLS INTERFACE mode=s_axilite port=return
+#pragma HLS INTERFACE mode=s_axilite port=in
+#pragma HLS INTERFACE mode=s_axilite port=out
+#pragma HLS INTERFACE mode=s_axilite port=w
+    // No pragmas for optimization ï¿½ basic interface
     Cipher(in, out, w); // AES-128 = 10 rounds
 }
 }
