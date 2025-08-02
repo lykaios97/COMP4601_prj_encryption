@@ -49,17 +49,18 @@ const byte Rcon[11] = {
     0x10, 0x20, 0x40, 0x80, 0x1B, 0x36
 };
 
-byte gmul(byte a, byte b) {
-    byte p = 0;
-    for (int i = 0; i < 8; i++) {
-        if (b & 1) p ^= a;
-        bool hi_bit = (a & 0x80) != 0;
-        a <<= 1;
-        if (hi_bit) a ^= 0x1b;
-        b >>= 1;
-    }
-    return p;
-}
+// byte gmul(byte a, byte b) {
+//     byte p = 0;
+//     for (int i = 0; i < 8; i++) {
+//     #pragma HLS PIPELINE II=1
+//         if (b & 1) p ^= a;
+//         bool hi_bit = (a & 0x80) != 0;
+//         a <<= 1;
+//         if (hi_bit) a ^= 0x1b;
+//         b >>= 1;
+//     }
+//     return p;
+// }
 
 byte xtime(byte x) {
     return (x << 1) ^ ((x & 0x80) ? 0x1b : 0);
@@ -75,40 +76,76 @@ byte gmul_fast(byte x, byte coeff) {
 }
 
 void SubBytes(byte state[4][4]) {
-    for (int r = 0; r < 4; r++)
-        for (int c = 0; c < 4; c++)
+    #pragma HLS inline
+    for (int r = 0; r < 4; r++) {
+    #pragma HLS unroll factor=2
+        for (int c = 0; c < 4; c++) {
+    #pragma HLS unroll factor=2
             state[r][c] = sbox[state[r][c]];
-}
-
-void ShiftRows(byte state[4][4]) {
-    for (int r = 1; r < 4; r++) {
-        for (int shift = 0; shift < r; shift++) {
-            byte temp = state[r][0];
-            state[r][0] = state[r][1];
-            state[r][1] = state[r][2];
-            state[r][2] = state[r][3];
-            state[r][3] = temp;
         }
     }
 }
 
+void ShiftRows(byte state[4][4]) {
+    #pragma HLS INLINE
+    // if resource usage is too high, remove these array partitions
+    #pragma HLS ARRAY_PARTITION variable=state complete dim=0
+    #pragma HLS ARRAY_PARTITION variable=state complete dim=1
+    byte temp;
+
+    temp = state[1][0];
+    state[1][0] = state[1][1];
+    state[1][1] = state[1][2];
+    state[1][2] = state[1][3];
+    state[1][3] = temp;
+
+    byte t1 = state[2][0];
+    byte t2 = state[2][1];
+    state[2][0] = state[2][2];
+    state[2][1] = state[2][3];
+    state[2][2] = t1;
+    state[2][3] = t2;
+
+    temp = state[3][3];
+    state[3][3] = state[3][2];
+    state[3][2] = state[3][1];
+    state[3][1] = state[3][0];
+    state[3][0] = temp;
+}
+
 void MixColumns(byte state[4][4]) {
+    #pragma HLS ARRAY_PARTITION variable=state complete dim=0
+    #pragma HLS ARRAY_PARTITION variable=state complete dim=1
     for (int c = 0; c < 4; c++) {
+    #pragma HLS unroll
         byte a[4], res[4];
-        for (int r = 0; r < 4; r++) a[r] = state[r][c];
 
-        res[0] = gmul(0x02, a[0]) ^ gmul(0x03, a[1]) ^ a[2] ^ a[3];
-        res[1] = a[0] ^ gmul(0x02, a[1]) ^ gmul(0x03, a[2]) ^ a[3];
-        res[2] = a[0] ^ a[1] ^ gmul(0x02, a[2]) ^ gmul(0x03, a[3]);
-        res[3] = gmul(0x03, a[0]) ^ a[1] ^ a[2] ^ gmul(0x02, a[3]);
+        a[0] = state[0][c];
+        a[1] = state[1][c];
+        a[2] = state[2][c];
+        a[3] = state[3][c];
 
-        for (int r = 0; r < 4; r++) state[r][c] = res[r];
+        res[0] = gmul_fast(a[0], 0x02) ^ gmul_fast(a[1], 0x03) ^ a[2] ^ a[3];
+        res[1] = a[0] ^ gmul_fast(a[1], 0x02) ^ gmul_fast(a[2], 0x03) ^ a[3];
+        res[2] = a[0] ^ a[1] ^ gmul_fast(a[2], 0x02) ^ gmul_fast(a[3], 0x03);
+        res[3] = gmul_fast(a[0], 0x03) ^ a[1] ^ a[2] ^ gmul_fast(a[3], 0x02);        
+
+        a[0] = state[0][c];
+        a[1] = state[1][c];
+        a[2] = state[2][c];
+        a[3] = state[3][c];
     }
 }
 
 void AddRoundKey(byte state[4][4], const word roundKey[4]) {
+    #pragma HLS INLINE
+    #pragma HLS ARRAY_PARTITION variable=state complete dim=0
+    #pragma HLS ARRAY_PARTITION variable=state complete dim=1
+
     for (int j = 0; j < 4; j++) {
+    #pragma HLS UNROLL
         for (int i = 0; i < 4; i++) {
+    #pragma HLS UNROLL
             ap_uint<8> k = (roundKey[j] >> (24 - 8 * i)) & 0xFF;
             state[i][j] ^= byte(k);
         }
@@ -130,12 +167,15 @@ word SubWord(word w) {
 
 void KeyExpansion(const byte key[16], word w[44]) {
     for (int i = 0; i < Nk; i++) {
+    #pragma HLS unroll
         w[i] = (word(key[4 * i]) << 24) |
                (word(key[4 * i + 1]) << 16) |
                (word(key[4 * i + 2]) << 8) |
                word(key[4 * i + 3]);
     }
+
     for (int i = Nk; i < Nb * (Nr + 1); i++) {
+    #pragma HLS unroll
         word temp = w[i - 1];
         if (i % Nk == 0)
             temp = SubWord(RotWord(temp)) ^ (word(Rcon[i / Nk]) << 24);
@@ -146,11 +186,15 @@ void KeyExpansion(const byte key[16], word w[44]) {
 void Cipher(byte in[16], byte out[16], const word w[]) {
     byte state[4][4];
 
-    for (int i = 0; i < 16; i++)
+
+    for (int i = 0; i < 16; i++) {
+    #pragma HLS unroll
         state[i % 4][i / 4] = in[i];
+    }
 
     AddRoundKey(state, &w[0]);
 
+    #pragma PIPELINE II = 1
     for (int round = 1; round < Nr; round++) {
         SubBytes(state);
         ShiftRows(state);
@@ -163,5 +207,6 @@ void Cipher(byte in[16], byte out[16], const word w[]) {
     AddRoundKey(state, &w[Nr * Nb]);
 
     for (int i = 0; i < 16; i++)
+    #pragma HLS unroll
         out[i] = state[i % 4][i / 4];
 }
